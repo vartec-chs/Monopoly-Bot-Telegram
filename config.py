@@ -1,0 +1,8 @@
+DB_NAME = "monopoly_db"
+GAMES_COLLECTION = "games"
+USERS_COLLECTION = "users"
+ADMINS_COLLECTION = "admins"
+
+ADMINS_ID = [
+    1268895649
+]
