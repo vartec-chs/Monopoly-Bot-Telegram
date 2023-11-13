@@ -1,3 +1,4 @@
+from bson import ObjectId
 from database.core import DataBase
 
 
@@ -9,8 +10,8 @@ async def get_count_games(db: DataBase) -> int:
     return await db.games_collection.count_documents({})
 
 
-async def get_user_by_id(db: DataBase, _id: int) -> dict:
-    return await db.users_collection.find_one({"_id": _id})
+async def get_user_by_id(db: DataBase, _id: str) -> dict:
+    return await db.users_collection.find_one({"_id": ObjectId(_id)})
 
 
 async def get_user_exists(db: DataBase, tg_id: int) -> bool:
