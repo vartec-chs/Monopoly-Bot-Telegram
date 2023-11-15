@@ -3,10 +3,10 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.filters.callback_data import CallbackData
 
 
-from utils.user_dto import UserDTO
+from utils.dto import UserIdAndNameDTO
 
 
-class Pagination(CallbackData, prefix="admin"):
+class UsersListPagination(CallbackData, prefix="admin"):
     action: str
     page: int
 
@@ -35,25 +35,25 @@ def admin_users_list(page: int = 0) -> InlineKeyboardMarkup:
     builder.row(
         InlineKeyboardButton(
             text="⬅️",
-            callback_data=Pagination(action="prev", page=page).pack()
+            callback_data=UsersListPagination(action="prev", page=page).pack()
         ),
         InlineKeyboardButton(
             text="➡️",
-            callback_data=Pagination(action="next", page=page).pack()
+            callback_data=UsersListPagination(action="next", page=page).pack()
         ),
         width=2
     )
     return builder.as_markup()
 
 
-def users_list_menu(users: list[UserDTO]):
+def users_list_menu(users: list[UserIdAndNameDTO]):
     builder = InlineKeyboardBuilder()
 
     for user in users:
         builder.row(
             InlineKeyboardButton(
                 text=user.full_name,
-                callback_data=f"admin_users_list_{user._id}"
+                callback_data=f"admin_users_list_{user.id}"
             ),
             width=2
         )
@@ -61,3 +61,26 @@ def users_list_menu(users: list[UserDTO]):
     return builder.as_markup()
 
 
+def admin_users_list_menu(users: list[UserIdAndNameDTO], page: int = 0) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    for user in users:
+        builder.row(
+            InlineKeyboardButton(
+                text=user.full_name,
+                callback_data=f"admin_users_list_{user.id}"
+            )
+        )
+        
+    builder.row(
+        InlineKeyboardButton(
+            text="⬅️",
+            callback_data=UsersListPagination(action="prev", page=page).pack()
+        ),
+        InlineKeyboardButton(
+            text="➡️",
+            callback_data=UsersListPagination(action="next", page=page).pack()
+        ),
+        width=2
+    )
+    return builder.as_markup()
