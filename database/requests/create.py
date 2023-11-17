@@ -4,6 +4,7 @@ from database.core import DataBase
 
 
 
+
 async def add_new_admin(db: DataBase, tg_id: int) -> None:
 
     admin_data = {

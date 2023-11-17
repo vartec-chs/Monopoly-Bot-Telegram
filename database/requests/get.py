@@ -12,19 +12,19 @@ async def get_count_games(db: DataBase) -> int:
     return await db.games_collection.count_documents({})
 
 
-async def get_user_by_id(db: DataBase, _id: str) -> dict:
-    return await db.users_collection.find_one({"_id": ObjectId(_id)})
+async def get_user_by_id(db: DataBase, user_id: str) -> dict:
+    return await db.users_collection.find_one({"_id": ObjectId(user_id)})
 
 
 async def get_user_exists(db: DataBase, tg_id: int) -> bool:
     return await db.users_collection.count_documents({"tg_id": tg_id}) == 1
 
 
-async def get_user_is_blocked(db: DataBase, tg_id: int) -> bool:
+async def get_user_is_blocked_by_tg_id(db: DataBase, tg_id: int) -> bool:
     return await db.users_collection.count_documents({"tg_id": tg_id, "is_blocked": True}) == 1
 
 
-async def get_user_is_admin(db: DataBase, tg_id: int) -> bool:
+async def get_user_is_admin_by_tg_id(db: DataBase, tg_id: int) -> bool:
     return await db.admins_collection.count_documents({"tg_id": tg_id}) == 1
 
 
@@ -40,3 +40,8 @@ async def get_users_in_list_for_page(db: DataBase, page: int) -> list:
             "_id": 1
         }
         ).skip(page * SKIP).limit(SKIP).to_list(None)
+
+
+async def get_user_is_blocked_by_id(db: DataBase, user_id: str) -> bool:
+    return await db.users_collection.count_documents(
+        {"_id": ObjectId(user_id), "is_blocked": True}) == 1

@@ -19,3 +19,12 @@ class UserIdAndNameDTO(BaseDocument):
     full_name: str
 
 
+# class UserDto(BaseDocument):
+#     id: PyObjectId = Field(alias="_id", default=None)
+#     tg_id: int
+#     active_game_id: int | None = Field(default=None)
+#     all_games_id: list[int]
+#     is_blocked: bool
+
+#     def to_json(self): 
+#         return self.model_dump(by_alias=True, exclude_none=True)

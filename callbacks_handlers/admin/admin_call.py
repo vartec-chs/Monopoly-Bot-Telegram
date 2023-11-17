@@ -9,6 +9,7 @@ from database.requests.get import get_user_by_id, get_count_users, SKIP
 
 from filters.admin_filter import IsAdmin
 from utils.other import get_users_list_with_names
+from utils.text_builders import user_settings_text
 from keyboards.admin_kb import UsersListPagination, admin_users_list_menu
 
 router = Router(name=__name__)
@@ -26,19 +27,20 @@ async def admin_games(callback: CallbackQuery):
 async def admin_user_info(callback: CallbackQuery, db: DataBase, bot: Bot):
     await callback.answer()
 
-    _id = callback.data.split("_")[3]
-    user = await get_user_by_id(db, _id)
-
-    chat = await bot.get_chat(user["tg_id"])
-
-    user_id = user["tg_id"]
-
-    content = f"👤 <b>Информация о пользователе:</b>\n\n"\
-    f"🆔 <b>ID:</b> <i>{user_id}</i>\n"\
-    f"👤 <b>Имя:</b> <i>{chat.full_name}</i>\n"\
+    user_id = callback.data.split("_")[3]
+    user = await get_user_by_id(db, user_id)
+    tg_id = user["tg_id"]
     
 
-    await callback.message.edit_text(content)
+    await user_settings_text.user_settings_text_sender(
+        user_settings_text.UserSenderData(
+            user_id = user_id,
+            tg_id = tg_id,
+            bot = bot,
+            db = db,
+            callback = callback
+        )
+    )
       
 
 
